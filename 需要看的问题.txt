@@ -1,0 +1,46 @@
+问题:
+1、Android GIF图显示
+2、热修复和差分升级
+3、网络握手
+4、gradle的作用
+5、属性动画
+6、更新完以后，自启动
+7、Android各个版本特性
+8、Material Design设计
+9、Android启动界面
+10、HTTP 与TCP/IP
+11、DP,SP等之间的算法
+12、android内存优化
+13、画系统设计图
+14、看下AIDL和SO调用
+
+
+如何让方法必须重写，除了abstract
+
+
+
+
+可读性、可复用性、可扩展性、可维护性、
+
+
+
+
+1、在网络请求返回结果，onSuccess当中，写一个泛型Gson，解析有返回值的数据实体类。
+2、学习泛型使用
+
+
+java 内存:强软弱虚
+
+
+扎实的算法基础 ，能够在白纸上写出正确的算法，冒泡排序、二分查找等基础算法和分析、数据结构（数组、链表）等。
+
+
+二分查找程序题
+
+
+react native
+Hybird
+
+熟练 Android 的基本组件、熟悉新的 API(RecyclerView、CardView 等)的特性和使用。
+
+3、对 Android 应用的 View、Fragment、Activity 等生命周期和内存管理有清晰地认识

@@ -1,0 +1,412 @@
+-------------------------------------------------------------------------------Java部分 start------------------------------------------------------------------------------------------------------------
+
+JDK全称:Java Development Kit
+
+1、wait()、notify、notifyall区别和用法。
+wait()、notify()、notifyAll()是三个定义在Object类里的方法，可以用来控制线程的状态。
+如果对象调用了wait方法就会使持有该对象的线程把该对象的控制权交出去，然后处于等待状态。
+如果对象调用了notify方法就会通知某个正在等待这个对象的控制权的线程可以继续运行。
+如果对象调用了notifyAll方法就会通知所有等待这个对象控制权的线程继续运行。
+http://longdick.iteye.com/blog/453615
+
+
+2、wait和sleep区别
+共同点：都会阻塞当前线程。
+不同点:
+sleep是Thread类的方法,wait是Object类中定义的方法。
+sleep方法没有释放锁:不让出资源
+wait方法释放了锁：使得其他线程可以使用同步控制块或者方法
+Thread.sleep和Object.wait都会暂停当前的线程，对于CPU资源来说，不管是哪种方式暂停的线程，都表示它暂时不再需要CPU的执行时间。
+OS会将执行时间分配给其它线程。区别是，调用wait后，需要别的线程执行notify/notifyAll才能够重新获得CPU执行时间。
+
+
+3、集合区别
+Set（集）：集合中的元素不按特定方式排序，并且没有重复对象。他的有些实现类能对集合中的对象按特定方式排序。
+List（列表）：集合中的元素按索引位置排序，可以有重复对象，允许按照对象在集合中的索引位置检索对象。
+Map（映射）：集合中的每一个元素包含一对键对象和值对象，集合中没有重复的键对象，值对象可以重复。他的有些实现类能对集合中的键对象进行排序。
+java.util.Collection是一个集合接口，是Set和List的父接口。
+java.util.Collections 是一个包装类。它包含有各种有关集合操作的静态多态方法。此类不能实例化，就像一个工具类，服务于Java的Collection框架。
+
+Set:
+1)HashSet：把HashMap中的Key作为Set的对应存储项，具有很好的存取性能。当HashSet向集合中加入一个对象时，会调用对象的hashCode()方法获取哈希码，然后根据这个哈希码进一步计算出对象在集合中的存放位置。
+  这个也是为什么在Set中不能像在List中一样有重复的项的根本原因，因为HashMap的key是不能有重复的。 集合元素可以是null,但只能放入一个null
+2)LinkedHashSet：HashSet的一个子类，一个链表，有序。集合同样是根据元素的hashCode值来决定元素的存储位置，但是它同时使用链表维护元素的次序。按照插入时的顺序排放。LinkedHashSet在迭代访问Set中的全部元素时，
+  性能比HashSet好，但是插入时性能稍微逊色于HashSet。 
+3)TreeSet：SortedSet接口的唯一实现类，默认自然排序，也支持定制排序。
+4)Collections.synchronizedSet() 线程安全
+ 
+List:
+1)Vector[ˈvektə(r)]:基于动态数组数据结构实现，有序。线程安全。
+2)ArrayList:基于动态数组数据结构实现，有序。可以根据下标直接访问元素。但是在ArrayList的中间插入和移除元素时较慢，因为里面需要数组的移动。
+3)LinkedList:基于链表的数据结构实现，有序。存储时存储了数据和下一个节点的位置。新增和删除操作，LinedList比较占优势。查询慢，因为 LinkedList要移动指针。
+4)Collections.synchronizedList() 线程安全
+
+Map:
+1)HashMap:用到了哈希码的算法，以便快速查找一个键。最多只允许一条记录的键为Null;允许多条记录的值为 Null,因此不能由get()方法来判断HashMap中是否存在某个键，而应该用containsKey()方法来判断。
+2)TreeMap:采用红黑树,对键按序存放。默认自然排序，也支持定制排序。
+3)LinkedHashMap:HashMap子类，保存了插入的顺序。在遍历的时候会比HashMap慢，不过有种情况例外，当HashMap容量很大，实际数据较少时，遍历起来可能会比 LinkedHashMap慢，因为LinkedHashMap的遍历速度只和实际数据有关，
+  和容量无关，而HashMap的遍历速度和他的容量有关。
+4)Hashtable:线程安全。不允许记录的键或者值为空。大小增加到一定的时候，性能会急剧下降，因为所有操作都会锁住整个map。
+5)ConcurrentMap:线程安全。不允许记录的键或者值为空。内部使用Segment数组,在迭代的过程中，ConcurrentHashMap仅仅锁定map的某个部分，比Hashtable性能好。
+6)WeakHashMap:弱引用，当某个键不再正常使用时，会被从WeakHashMap中被自动移除。适用于某些缓存，例如图片缓存。
+7)Collections.synchronizedMap() 线程安全，但并不一定绝对的线程安全。
+
+
+4、JAVA四种引用
+1)强引用(StrongReference)
+  强引用是使用最普遍的引用。如果一个对象具有强引用，那垃圾回收器绝不会回收它。当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题。
+
+2)软引用(SoftReference)
+  如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；如果内存空间不足了，就会回收这些对象的内存。只要垃圾回收器没有回收它，该对象就可以被程序使用。软引用可用来实现内存敏感的高速缓存。
+  软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。
+
+3)弱引用(WeakReference)
+  弱引用与软引用的区别在于：只具有弱引用的对象拥有更短暂的生命周期。在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。不过，
+  由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。
+  弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果弱引用所引用的对象被垃圾回收，Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。
+
+4)虚引用(PhantomReference)
+  “虚引用”顾名思义，就是形同虚设，与其他几种引用都不同，虚引用并不会决定对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收。
+  虚引用主要用来跟踪对象被垃圾回收器回收的活动。虚引用与软引用和弱引用的一个区别在于：虚引用必须和引用队列 （ReferenceQueue）联合使用。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，
+  就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。
+  https://www.cnblogs.com/yw-ah/p/5830458.html
+
+
+5、Volatile和synchronized
+volatile关键字只能修饰变量，使变量在多个线程间可见（可见性）。但Volatile是非原子性的，原子性就是某系列的操作步骤要么全部执行，要么都不执行，例如i++就是非原子性的，所以仅靠volatile不能保证线程的安全性。
+synchronized不仅保证可见性，而且还保证原子性。
+
+6、单例
+懒汉模式(在使用的时候初始化):
+public class Singleton {
+    private static Singleton singleton;
+    private Singleton() {}
+
+    public static synchronized Singleton getSingleton() {
+        if (singleton == null) {
+            singleton = new Singleton();
+        }
+
+        return singleton;
+    }
+}
+
+饿汉模式(直接初始化):
+public class Singleton {
+    private static final Singleton singleton = new Singleton();
+    private Singleton () {}
+
+    public static Singleton getSingleton() {
+        return singleton;
+    }
+}
+
+
+
+6、TCP/IP
+TCP/IP协议是一个协议簇，包括应用层,传输层，网络层，网络访问层。
+应用层:TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet 等等
+传输层:TCP，UDP
+网络层:IP，ICMP，OSPF，EIGRP，IGMP
+网络接口层:数据链路层:SLIP，CSLIP，PPP，MTU;物理层:ISO2110，IEEE802，IEEE802.2
+
+7、TCP
+TCP三次握手
+1)主机A通过向主机B 发送一个含有同步序列号的标志位的数据段给主机B ,向主机B 请求建立连接,通过这个数据段,
+主机A告诉主机B 两件事:我想要和你通信;你可以用哪个序列号作为起始数据段来回应我.
+2)主机B 收到主机A的请求后,用一个带有确认应答(ACK)和同步序列号(SYN)标志位的数据段响应主机A,也告诉主机A两件事:
+我已经收到你的请求了,你可以传输数据了;你要用哪佧序列号作为起始数据段来回应我
+3)主机A收到这个数据段后,再发送一个确认应答,确认已收到主机B 的数据段:"我已收到回复,我现在要开始传输实际数据了
+这样3次握手就完成了,主机A和主机B 就可以传输数据了.
+
+TCP四次挥手
+1)当主机A完成数据传输后,将控制位FIN置1,提出停止TCP连接的请求
+2)主机B收到FIN后对其作出响应,确认这一方向上的TCP连接将关闭,将ACK置1
+3)由B 端再提出反方向的关闭请求,将FIN置1
+4)主机A对主机B的请求进行确认,将ACK置1,双方向的关闭结束.
+
+8、TCP和UDP区别
+TCP:基于连接，要三次握手，四次挥手；系统资源占用多；保证数据顺序和正确性。
+UDP:没有连接，系统资源占用少；可能丢包，不保证数据顺序。
+
+9、HTTP和HTTPS区别
+HTTP:超文本传输协议。以明文方式发送内容，不提供任何方式的数据加密。
+HTTPS:具有安全性的ssl加密传输协议，需要到ca申请证书，一般免费证书很少，需要交费。
+SSL提供的服务：
+1)认证用户和服务器，确保数据发送到正确的客户机和服务器
+2)加密数据以防止数据中途被窃取
+3)维护数据的完整性，确保数据在传输过正中不被改变
+
+10、服务器默认端口
+SSH:22
+HTTP:80
+HTTPS:443
+
+11、JAVA代理模式及在Android中的应用
+https://juejin.im/user/5743cb0ec26a38006c3b5c75
+
+11、FTP和HTTP区别，项目中为什么用FTP上传下载文件
+
+
+
+
+-------------------------------------------------------------------------------Java部分 end------------------------------------------------------------------------------------------------------------
+  
+  
+-------------------------------------------------------------------------------Android start------------------------------------------------------------------------------------------------------------
+基础:------------------------------------------------------------
+1、SparseArray
+SparseArray是用来替代HashMap<Integer,Object> 类型的，Key一定是int类型。主要是大大节省了内存开销。
+
+2、Serializable和Parcelable
+Serializable接口是Java提供的一个序列化接口，它是一个空接口，为对象提供标准的序列化和反序列化操作。可用于内存、缓存、网络等数据传输。
+Parcelable接口是Android SDK提供的一种专门用于Android应用中对象的序列化和反序列化的方式，相比于Seriablizable具有更好的性能。内存间数据传递的时候使用，例如Intent等。由于Parcelable版本造成的不同，不要用来数据持久化操作。
+
+3、Android 进程间通信的几种实现方式
+1)Intent
+Intent callIntent = new  Intent(Intent.ACTION_CALL, Uri.parse("tel:12345678" );  
+startActivity(callIntent);
+2)Content Provider
+如访问系统相册
+3)Broadcast
+如显示系统时间
+4)AIDL服务
+
+4、Android五大进程
+前台进程：
+即与用户正在交互的Activity或者Activity用到的Service等，如果系统内存不足时前台进程是最后被杀死的
+
+可见进程：
+可以是处于暂停状态(onPause)的Activity或者绑定在其上的Service，即被用户可见，但由于失去了焦点而不能与用户交互.
+
+服务进程：
+其中运行着使用startService方法启动的Service，虽然不被用户可见，但是却是用户关心的，例如用户正在非音乐界面听的音乐或者正在非下载页面自己下载的文件等；当系统需要空间运行前两者进程(–>指的是前台进程和可见进程)时才会被终止.
+
+后台进程：
+其中运行着执行onStop方法而停止的程序，但是却不是用户当前关心的，例如后台挂着的QQ，这样的进程系统一旦没了有内存就首先被杀死.
+
+空进程：
+不包含任何应用程序的程序组件的进程，这样的进程系统是一般不会让他存在的，为了进行缓存，使下次App启动的时候更快，当系统需要内存是最先被杀死.
+如何避免后台进程被杀死：
+调用startForegound，让你的Service所在的线程成为前台进程
+Service的onStartCommond返回START_STICKY或 
+TART_REDELIVER_INTENT
+Service的onDestroy里面重新启动自己
+root之后提升为系统级App
+在Jni层使用c代码fork一个进程
+在清单文件中，intent-filter节点中添加android:priotity属性，让其等于1000，这是最高的优先级，不容易被杀死
+在前台放一个像素的页面，例如QQ
+
+4、内存优化
+
+5、Service注册方式
+
+6、内存泄漏和内存溢出
+
+7、Handler机制。
+Message.obtain的消息池上限是50个 
+
+8、属性动画
+https://www.jianshu.com/p/d23f58f4368d
+https://www.jianshu.com/p/2412d00a0ce4
+http://blog.csdn.net/guolin_blog/article/details/43536355
+
+9、Binder机制
+https://www.jianshu.com/p/f4f722d3e51d
+http://blog.csdn.net/qq_23191031/article/details/60145022
+http://mp.weixin.qq.com/s?__biz=MzIxNjM4NDM2NA==&mid=2247483934&idx=1&sn=27848058e8790f2cbb0d22d101640ce3&chksm=9788941da0ff1d0b9ff2d5468ec6d33b42df5d59aaf4d264d7d199207a5be087232e673dee49&mpshare=1&scene=1&srcid=0304PoUC2aKh0EdmbUnKhj3z#rd
+https://www.cnblogs.com/qingchen1984/p/5212755.html
+
+
+Fregment相关:------------------------------------------------------------
+1)回退栈
+类似于activity栈,如果fragment不加入回退栈,fragmentA,被fragmentB替换后,A的实例会被干掉,点击goback建不会回到A.fragment栈清空之后,再点回退键,才会调用activity栈,回退activity。
+在commit前添加addToBackStack(Null)方法。
+
+2)后台转前台，重影问题
+在后台时,由于生命周期重合,所以,oncreat时会重绘fragment,导致重合,解决办法是只有在savedInstanceState==null时，才进行创建Fragment实例。
+
+3)replace和add区别
+replace:替换掉相同ID的所有fragment。
+add:添加一个fregment,通常和hide()show()方法同时使用，不然会重叠。
+
+4)和Activity之间的数据交互方式
+Activity传到fragment:用bundle，设置argument;getActivity()方法，获取activity，然后强转调用Activity方法。
+Fragment传到Activity:Activity实现接口，在onAttach中通过context获取该接口;
+
+5)commit()和commitAllowingStateLoss()区别
+后者在状态丢失的时候不会抛出异常。通常你不会想使用这个方法因为它意味着状态丢失可能发生。更好的解决方案当然是修改你的程序以便commit()被保证在activity的状态被保存前调用，
+因为这样可能会让用户体验更好。除非状态丢失是不可避免的，否则commitAllowingStateLoss()就不应该被使用。
+
+6)生命周期
+普通:
+created:
+onAttach() -> 执行该方法时，Fragment与Activity已经完成绑定，该方法有一个Activity类型的参数，代表绑定的Activity，这时候你可以执行诸如mActivity = activity的操作
+onCreate() -> 初始化Fragment。可通过参数savedInstanceState获取之前保存的值
+onCreateView() -> 初始化Fragment的布局。加载布局和findViewById的操作通常在此函数内完成，但是不建议执行耗时的操作，比如读取数据库数据列表
+onActivityCreated() -> 执行该方法时，与Fragment绑定的Activity的onCreate方法已经执行完成并返回，在该方法内可以进行与Activity交互的UI操作，所以在该方法之前Activity的onCreate方法并未执行完成，如果提前进行交互操作，会引发空指针异常
+
+started:
+onStart() -> 执行该方法时，Fragment由不可见变为可见状态
+
+resumed:
+onResume() -> 执行该方法时，Fragment处于活动状态，用户可与之交互
+
+paused:
+onPause() -> 执行该方法时，Fragment处于暂停状态，但依然可见，用户不能与之交互
+
+stopped:
+onStop() -> 执行该方法时，Fragment完全不可见
+
+destroyed:
+onDestroyView() -> 销毁与Fragment有关的视图，但未与Activity解除绑定，依然可以通过onCreateView方法重新创建视图。通常在ViewPager+Fragment的方式下会调用此方法
+onDestroy() -> 销毁Fragment。通常按Back键退出或者Fragment被回收时调用此方法
+onDetach() -> 解除与Activity的绑定。在onDestroy方法之后调用
+
+其他:
+onSaveInstanceState() -> 保存当前Fragment的状态。该方法会自动保存Fragment的状态，比如EditText键入的文本，即使Fragment被回收又重新创建，一样能恢复EditText之前键入的文本
+setUserVisibleHint() -> 设置Fragment可见或者不可见时会调用此方法。在该方法里面可以通过调用getUserVisibleHint()获得Fragment的状态是可见还是不可见的，如果可见则进行懒加载操作。
+
+Fragment变为不可见状态(锁屏、回到桌面、被Activity完全覆盖):
+onPause()
+onSaveInstanceState()
+onStop()
+
+Fragment由不可见变为活动状态(屏幕解锁等):
+onStart()
+onResume()
+
+Fragment变为部分可见状态(打开Dialog样式的Activity):
+onPause()
+onSaveInstanceState()
+
+Fragment由部分可见变为活动状态:
+onResume()
+
+切换到其他Fragment:
+onPause()
+onStop()
+onDestroyView()
+
+切换到其他Fragment，加入退回盏:
+
+
+切换回本身的Fragment:
+onCreateView()
+onActivityCreated()
+onStart()
+onResume()
+
+退出应用(注意退出不会调用onSaveInstanceState方法，因为是人为退出，没有必要再保存数据):
+onPause()
+onStop()
+onDestroyView()
+onDestroy()
+onDetach()
+
+横竖屏切换(Fragment被回收又重新创建):
+被回收执行 onPause() -> onSaveInstanceState() -> onStop() -> onDestroyView() -> onDestroy() -> onDetach()
+重新创建执行 onAttach() -> onCreate() -> onCreateView() -> onActivityCreated() -> onStart() -> onResume() -> setUserVisibleHint()
+
+
+Activity相关:------------------------------------------------------------
+1)生命周期
+完整的Activity生命周期会按照如下顺序回调：
+onCreate -> 最重要是在里面调用setContentView，还可以在里面初始化各控件、设置监听、并初始化一些全局的变量。
+因为在Activity的一次生命周期中，onCreate方法只会执行一次。在Paused和Stopped状态下恢复或重启的下，这些控件、监听和全局变量也不会丢失。
+即便是内存不足，被回收了，再次Recreate的话，又是一次新的生命周期的开始，又会执行onCreate方法
+onStart -> 用户可见，但不可以交互
+onResume -> 用户可见，可以交互
+onPause -> 
+onStop -> 
+onDestroy ->确定某些资源是否没有被释放，做一些最终的清理工作，比如在这个Activity的onCreate中开启的某个线程，那么就要在onDestory中确定它是否结束了，如果没有，就结束它.
+
+其他:
+moveTaskToBack() -> 此方法直接将当前Activity所在的Task移到后台，同时保留activity顺序和状态
+onSaveInstanceState(Bundle outState) -> Activity 即将销毁时保存数据
+onRestoreInstanceState(Bundle savedInstanceState) -> Activity 重建或者恢复时候取出数据
+
+由A Activity跳转到B Activity，依次调用:
+A:onPause -> B:onCreate -> B:onStart -> B:onResume -> A:onStop
+此时点Back键，依次调用:
+B:onPause -> A:onRestart -> A:onStart -> A:onResume -> B:onStop -> B:onDestroy
+此时如果按下Back键，系统返回到桌面，并依次执行：
+A:onPause -> A:onStop -> A:onDestroy
+此时如果按下Home键（非长按），系统返回到桌面，并依次执行
+A:onPause -> A:onStop。
+由此可见，Back键和Home键主要区别在于是否会执行onDestroy
+
+切换屏幕生命周期(自测结果，三台设备，版本:4.4,6.0,7.0):
+onPause()
+onSaveInstanceState()
+onStop()
+onDestroy()
+onCreate()
+onStart()
+onRestoreInstanceState()
+onResume()
+
+
+2)设置横竖屏
+只要设置android:screenOrientation属性即可
+landscape：限制界面为横屏，旋转屏幕也不会改变当前状态。
+portrait：限制界面为竖屏，旋转屏幕也不会改变当前状态。
+sensor:根据传感器定位方向，旋转手机90度，180,270,360，界面都会发生变化。
+sensorLandscape：（横屏的旋转，不会出现竖屏的现象）根据传感器定位方向，旋转手机180度界面旋转。一般横屏游戏会是这个属性。
+sensorPortrait：（竖屏的旋转，不会出现横屏的现象）根据传感器定位方向，旋转手机180度界面会旋转。
+unspecified：由系统选择显示方向，不同的设备可能会有所不同。（旋转手机，界面会跟着旋转）
+user:用户当前的首选方向。
+nosensor：不由传感器确定方向。旋转设备的时候，界面不会跟着旋转。初始界面方向由系统提供。
+
+3)4种启动方式
+standard-默认模式:
+默认模式，可以不用写配置。在这个模式下，都会默认创建一个新的实例。因此，在这种模式下，可以有多个相同的实例，也允许多个相同Activity叠加
+
+singleTop-栈顶复用模式:
+可以有多个实例，但是不允许多个相同Activity叠加。即，如果Activity在栈顶的时候，启动相同的Activity，不会创建新的实例，而会调用其onNewIntent方法
+
+singleTask-栈内复用模式：
+如果栈中存在这个Activity的实例就会复用这个Activity，不管它是否位于栈顶，复用时，会将它上面的Activity全部出栈，并且会回调该实例的onNewIntent方法
+
+singleInstance-全局唯一模式:
+Activity会单独占用一个Task栈，具有全局唯一性，即整个系统中就这么一个实例，由于栈内复用的特性，后续的请求均不会创建新的Activity实例，除非这个特殊的任务栈被销毁了。
+以singleInstance模式启动的Activity在整个系统中是单例的，如果在启动这样的Activiyt时，已经存在了一个实例，那么会把它所在的任务调度到前台，重用这个实例
+
+-------------------------------------------------------------------------------Android end------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+View+handler
+View+动画
+View+触摸
+
+
+glide和fresco缓存对比:
+http://blog.csdn.net/caidai1989/article/details/73742416
+
+OKHTTP 3.0:
+你必须学会的okhttp3.0入门篇
+
+
+
+
+
+MPAndroidChart
+
+登陆流程
+
+DataBinding
+
+Android系统匿名共享内存Ashmem(Anonymous Shared Memory)
+
+重复点击问题:记得有个第三方框架可以解决
+
+算法:
+折半查找
+
+学习计划
