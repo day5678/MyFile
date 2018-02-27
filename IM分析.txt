@@ -15,7 +15,7 @@ netty:使用TCP协议
 
 
 加入的功能:
-AT功能、
+AT功能、表情
 
 
 
@@ -36,7 +36,7 @@ http://www.52im.net/thread-281-1-1.html
 
 
 
-
+动画！！！
 
 
 View绘制(例如仪表盘)
