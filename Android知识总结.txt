@@ -265,6 +265,10 @@ ServiceManager:跨进程通讯中提供服务的注册和查询
  3)content provider
  4)broadcast receiver
 	动态注册和AndroidManifest文件中进行静态注册
+	
+	
+Material design
+http://wiki.jikexueyuan.com/project/material-design/material-design-intro/introduction.html
 
 
 Fregment相关:------------------------------------------------------------
@@ -394,7 +398,7 @@ onCreate()
 onStart()
 onRestoreInstanceState()
 onResume()
-
+ 
 
 2)设置横竖屏
 只要设置android:screenOrientation属性即可
@@ -442,19 +446,26 @@ MVVM:
 
 
 第五篇 性能优化
-第33章 代码优化
+第33章 
+1、代码优化
  1)数据结构选择
  对JAVA当中常用数据结构有深刻理解，例如ArrayList、LinkedList等，Android当中，如parcelable,SparseArray。
 
- 图片优化
+2、图片优化
  首先按照模块进行重命名文件，在代码当中也要把相应的图片进行重命名，所有模块重命名图片完毕后，使用AS上面删除无用图片的插件删除，在删除时一定要对图片进行浏览排查，防止错删
+ 
+3、电量优化
+
+4、布局优化
+
+5、网络优化
 
 -------------------------------------------------------------------------------Android高级进阶(书) end------------------------------------------------------------------------------------------------------------
 
 View+handler
 View+动画
 View+触摸
-
+自定义View:https://www.zhihu.com/question/41101031
 
 glide和fresco缓存对比:
 http://blog.csdn.net/caidai1989/article/details/73742416
@@ -481,6 +492,8 @@ Android性能优化
 Android系统匿名共享内存Ashmem(Anonymous Shared Memory)
 
 重复点击问题:记得有个第三方框架可以解决
+
+截取崩溃日志方式
 
 算法:
 折半查找
