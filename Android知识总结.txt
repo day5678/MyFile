@@ -39,7 +39,9 @@ List:
 1)Vector[ˈvektə(r)]:基于动态数组数据结构实现，有序。线程安全。
 2)ArrayList:基于动态数组数据结构实现，有序。可以根据下标直接访问元素。但是在ArrayList的中间插入和移除元素时较慢，因为里面需要数组的移动。
 3)LinkedList:基于链表的数据结构实现，有序。存储时存储了数据和下一个节点的位置。新增和删除操作，LinedList比较占优势。查询慢，因为 LinkedList要移动指针。
-4)Collections.synchronizedList() 线程安全
+4)CopyOnWriteArrayList:通俗的理解是当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。这样做的好处是我们可以对CopyOnWrite容器进行并发的读，而不需要加锁，
+  因为当前容器不会添加任何元素。所以CopyOnWrite容器也是一种读写分离的思想，读和写不同的容器。
+5)Collections.synchronizedList():线程安全
 
 Map:
 1)HashMap:用到了哈希码的算法，以便快速查找一个键。最多只允许一条记录的键为Null;允许多条记录的值为 Null,因此不能由get()方法来判断HashMap中是否存在某个键，而应该用containsKey()方法来判断。
@@ -141,6 +143,14 @@ SSL提供的服务：
 SSH:22
 HTTP:80
 HTTPS:443
+
+11、getMethods()和getDeclaredMethods()区别
+getMethods(),该方法是获取本类以及父类或者父接口中所有的公共方法(public修饰符修饰的)
+getDeclaredMethods(),该方法是获取本类中的所有方法，包括私有的(private、protected、默认以及public)的方法。
+
+12、Java8新特性
+1)Lambda(ˈlæmdə)表达式和函数式接口
+http://blog.csdn.net/u014470581/article/details/54944384
 
 11、JAVA代理模式及在Android中的应用
 https://juejin.im/user/5743cb0ec26a38006c3b5c75
@@ -266,6 +276,58 @@ ServiceManager:跨进程通讯中提供服务的注册和查询
  4)broadcast receiver
 	动态注册和AndroidManifest文件中进行静态注册
 	
+13、android向前兼容和向后兼容
+向前兼容:可以理解为向新版本兼容，实际版本大于targetSdkVersion，则按照targetSdkVersion版本运行，实际版本比targetSdkVersion小，则按照当前手机版本运行。
+向后兼容:可以理解为向老版本兼容，通过支持库(support library)来实现的。比如appcompat-v4、appcompat-v7使得低版本手机可以支持Material Design。 
+
+14、Android各个版本的特性
+4.x:
+1)新锁屏界面
+  Android4.0重新设计了锁屏幕UI，下方的解锁虚拟按键向周围发射出微光，轻轻拖动就可以解锁，比原来在UI上确实有很大的进步。
+2)全新通知栏
+3)截屏功能
+4)语音键盘
+
+
+5.x:
+1)Material Design(CardView和RecycleView等等)
+2)运行时机制,采用ART(Android Runtime)，以前是dalvik(Android平台的虚拟机),运行速度提升.
+  Dalvik,每次运行,字节码都需要通过即时编译器转换成机器码(JIT)。
+  ART,第一次安装应用的时候,字节码就会预先编译成机器码(AOT)。
+3)通知栏改善，例如可编辑、锁屏可见、浮动通知等。
+
+6.x:
+1)运行时权限
+2)移除HTTP Client的支持
+3)电量优化
+  a.Doze [doʊz](豆子)
+  激活方式:屏幕关闭&没有连接电源&持续一段时间
+  表现:系统通过限制app访问网络和其对CPU使用，并延时执行作业(第一次好像是30秒，标准闹钟 AlarmManager也会被延迟，可以使用setAndAllowWhileIdle()或setExactAndAllowWhileIdle()避免延迟)，来达到省电的目的。
+  同时，为了保证app的工作，系统会周期地退出Doze模式，以保证app完成那些被延时的任务。且随着系统处于Doze模式时间增长，进入周期性的频率会降低。
+  http://blog.csdn.net/clingtom/article/details/70142401
+  b.App Standby
+  当用户不触摸使用应用程序一段时间时，该应用程序处于App Standby状态
+
+7.x
+1)通知栏快捷回复
+2)应用分屏(多窗口)
+3)VR支持
+4)JIT/AOT编译(Just In Time,Ahead Of Time)
+  Just in Time (JIT) 编译器，对 ART 进行代码分析，让它可以在应用运行时持续提升 Android 应用的性能。 JIT 编译器对 Android 运行组件当前的 Ahead of Time (AOT) 编译器进行了补充，
+  有助于提升运行时性能，节省存储空间，加快应用更新和系统更新速度。JIT 编译器最实际的好处之一是应用安装和系统更新的速度。
+5)APK signature scheme v2
+  它能提供更快的应用安装时间和更多针对未授权 APK 文件更改的保护。
+
+8.x
+1)视频画中画功能
+  https://www.cnblogs.com/qyun/p/6715195.html
+  PIP 模式不会改变 Activity 的生命周期。在指定时间只有最近与用户交互过的 Activity 为活动状态。 该 Activity 将被视为顶级 Activity。 所有其他 Activity 虽然可见，但均处于暂停状态。
+  当一个 Activity 处于 PIP 模式时，其实它是出在暂停状态，但其内容会继续展示。
+2)通知快速预览
+  它是位于应用程序图标之上的小小的循环点，只有当应用出现未读通知时，它才会出现。这时候长按应用程序图标，就会以类似气泡的形式快速预览。而在通知中心中删除这些未读通知，应用图标上的标记点也会消失。
+3)自适应图标
+  通过定义两张图层（前景与背景）你可以制定你的桌面图标外观，你必须提供没有形状和阴影的 PNG 格式图象作为图层。
+
 	
 Material design
 http://wiki.jikexueyuan.com/project/material-design/material-design-intro/introduction.html
@@ -462,6 +524,115 @@ MVVM:
 
 -------------------------------------------------------------------------------Android高级进阶(书) end------------------------------------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------retrofit2.0 start------------------------------------------------------------------------------------------------------------
+https://www.jianshu.com/p/308f3c54abdd
+
+注解Streaming:意味着立刻传递字节码，而不需要把整个文件读进内存。默认是直接把所有先放入内存当中。
+
+call.execute()同步请求，需要放到新线程
+call.enqueue()异步请求
+call.cancel()取消请求，会执行onFailure()，所以需要call.isCanceled()特殊处理
+
+-------------------------------------------------------------------------------retrofit2.0 end------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------EventBus3.0 start------------------------------------------------------------------------------------------------------------
+自己实现的观察者模式、BroadcastReceiver和EventBus三者的优缺点是什么?
+https://www.zhihu.com/question/36063246
+
+使用:
+Observable：需要把行为绑定在Observer上，耦合性高，使用者还需要了解你 Observable 的结构，发送方要继承或定义个内部 Observable，接收方要继承 Observer ，还要弄点代码处理不同的通知类型；
+LocalBroadcastManager：用一个 Intent 封装广播事件，首先要定义 Action 常量、ExtraKey 常量，发送时要 put 一个或一堆 Extra，接收方要继承BroadcastReceiver，弄个 IntentFilter ，
+						在onReceive 函数里用 switch-case 通过 action 判断类型， get  一个或一堆 Extra 来处理
+EventBus：将广播事件抽像成一个类；抽象程序上 EventBus 比较好，写个类定义一个 Event 类型，发送方就是 post，接收方就是定义一个函数，参数为对应类型。
+
+线程
+Observable 接收方在调用线程处理。
+LocalBroadcastManager 所有调用都是在主线程，
+EventBus 可以定义在调用线程、主线程、后台线程、异步。
+
+生命周期
+都需要注意接收方生命周期的问题。在不用的时候要 unregister。
+
+Others
+EventBus 还有一些额外功能，比如说定义多个接收方接收的顺序（LocalBroadcastManager不支持但全局 Broadcast 是支持的 ）。
+
+EventBus3.0:
+https://www.jianshu.com/p/bda4ed3017ba
+
+public class MessageEvent {
+
+    private String message;
+
+    public MessageEvent(String message){
+        this.message = message;
+    }
+
+    public String getMessage(){
+        return message;
+    }
+}
+
+普通发送
+EventBus.getDefault().post(new MessageEvent("Hello !....."));
+
+Subscribe注解:
+threadMode代表订阅方法所运行的线程
+public enum ThreadMode {
+    POSTING,
+    MAIN,
+    BACKGROUND,
+    ASYNC
+}
+POSTING:表示订阅方法运行在发送事件的线程。
+MAIN：表示订阅方法运行在UI线程，由于UI线程不能阻塞，因此当使用MAIN的时候，订阅方法不应该耗时过长。
+BACKGROUND：表示订阅方法运行在后台线程，如果发送的事件线程不是UI线程，那么就使用该线程；如果发送事件的线程是UI线程，那么新建一个后台线程来调用订阅方法。
+ASYNC：订阅方法与发送事件始终不在同一个线程，即订阅方法始终会使用新的线程来运行。
+
+
+sticky代表是否是粘性事件
+关于粘性事件，可以参考Android的广播机制，其中有一个粘性广播，粘性广播的意思是：该广播发送后，会保存在内存中，如果后来有注册的Receiver与之匹配，那么该Receiver便会接收到该广播。
+那么粘性事件同理，在注册之前便把事件发生出去，等到注册之后便会收到最近发送的粘性事件（必须匹配）。注意：只会接收到最近发送的一次（只有一次）粘性事件，之前的会接受不到。
+EventBus.getDefault().postSticky(new MessageEvent("粘性事件1"));
+
+
+priority代表优先级
+
+笔记:
+1、他是一个懒汉模式的单例，EventBus.getDefult()会初始化，并获取默认EventBus配置，也有EventBus.builder()来定制EventBus
+2、
+
+-------------------------------------------------------------------------------EventBus3.0 end------------------------------------------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------------------Annotation注解 start------------------------------------------------------------------------------------------------------------
+1、Annotation (注解) 表示的是能够添加到Java源代码的语法元数据。类、方法、变量、参数、包都可以被注解，可用来将信息元数据和程序元素进行关联。
+
+2、Annotation 作用
+a.标记作用，用于告诉编译器一些信息
+b.编译时动态处理，如动态生成代码
+c.运行时动态处理，如得到注解信息
+这三个作用对应着后面自定义Annotation时说的@Retention三种值分别表示的Annotation
+
+3.Annotation 分类
+a.标准 Annotation
+包括 Override, Deprecated, SuppressWarnings，标准 Annotation 是指 Java 自带的几个 Annotation，上面三个分别表示重写函数，不鼓励使用(有更好方式、使用有风险或已不在维护)，忽略某项 Warning
+b.元 Annotation
+@Retention, @Target, @Inherited, @Documented，元 Annotation 是指用来定义 Annotation 的 Annotation。
+—@Documented：是否会保存到 Javadoc 文档中
+—@Retention：保留时间，可选值 SOURCE（源码时），CLASS（编译时），RUNTIME（运行时），默认为 CLASS，值为 SOURCE 大都为 Mark Annotation，这类 Annotation 大都用来校验，比如 Override, Deprecated, SuppressWarnings
+—@Target：可以用来修饰哪些程序元素，如 TYPE, METHOD, CONSTRUCTOR, FIELD, PARAMETER 等，未标注则表示可修饰所有。
+—@Inherited： 是否可以被继承，默认为 false
+c.自定义 Annotation
+ 表示自己根据需要定义的 Annotation，定义时需要用到上面的元 Annotation，这里只是一种分类而已，也可以根据作用域分为源码时、编译时、运行时 Annotation。
+
+ https://www.cnblogs.com/renhui/p/5910300.html
+-------------------------------------------------------------------------------Annotation注解 end------------------------------------------------------------------------------------------------------------
+
+
+分解K线图
 View+handler
 View+动画
 View+触摸
@@ -509,15 +680,11 @@ Android系统匿名共享内存Ashmem(Anonymous Shared Memory)
 
 
 
-
-
-
-
-
-
-
-
-
+MVP看一下
+源码和用法看几个(EventBus、retrofit)
+View绘制，+触摸+动画
+AIDL实现原理
+broadcast分为 全局和local
 
 
 
