@@ -1,33 +1,18 @@
-
-Iterator
-SparseArray
-
-4、同步关键字Volatile和synchronized
-5、TCP和UDP区别
-6、TCP三次握手和四次挥手
 7、单例的模式:饱汉模式，饿汉模式 ,双重判断，绝对单例等
 8、Android百分比布局
 9、Android系统崩溃监听及日志记录
 10、EventBus源码
 11、View、Fragment、Activity、Service生命周期
-12、Touch机制
 13、Handler机制
 14、常用算法
-15、HTTP和HTTPS
-16、java 内存:强软弱虚
-17、内存溢出和内存泄漏区别
 18、安全方面
-19、Android应用内的数据传递
 20、JNI
 22、Android的测试
 23、64K方法限制
 24、Android过度绘制
-25、runnable和thread的区别
-26、Thread中，start()和run()方法区别
 27、图片框架对比 Picaso\glide\freco
 28、MVC\MVP\MVVM区别
 29、设计模式
-30、String、StringBuffer和StringBuilder区别 
 31、UncaughtExceptionHandler 
 32、Android网络数据传输安全
 33、面向对象
@@ -35,9 +20,6 @@ SparseArray
 35、热更新
 36、Java动态代理机制
 37、图片三级缓存，Lrucach软引用
-38、fregment add和replace区别
-39、自定义注释
-40、Android序列化方式
 
 
 
@@ -45,11 +27,9 @@ SparseArray
 泛型
 Android各种widget组件
 android内存管理机制
-Stack Overflow是什么
 抽象平台化设计
 图像动画
 Android平台内存管理机制、进程管理机制、任务管理机制
-熟悉常用接口json、xml、protobuf
 流量与耗电量优化等有一定的心得体会
 具有网络应用（HTTP、SOAP、REST等）的开发经验
 
@@ -58,8 +38,6 @@ Android平台内存管理机制、进程管理机制、任务管理机制
 
 可读性、可复用性、可扩展性、可维护性、
 
-
-官方MVP例子，Modle也是在P当中new的吗？
 
 58同城
 Jvm原理，Java内存管理，Android的四大组件的工作过程，如何创建service，进程间通信IPC机制，AIDL、Binder、  多进程，View的绘制原理以及其事件分发机制，还有looper消息队列机制
