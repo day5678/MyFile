@@ -35,7 +35,7 @@ IM模块:
  
 
 加入的功能:
-AT功能、表情、红包、任务功能(消息和群组)、群文件
+AT功能、表情、红包、任务功能(消息和群组)、群文件、角标
 
 修改功能:
 把图片和音频上传到阿里云上
@@ -78,7 +78,8 @@ netty和mina对比:
 心跳机制:
 采用AlarmManager+Thread（比较稳定）方式
 防止NAT超时(网络地址转换):大部分移动无线网络运营商都在链路一段时间没有数据通讯时，会淘汰 NAT 表中的对应项，造成链路中断(NAT超时的定义)。
-TCP的KeepAlive只能保证两端的连接还存在，如果服务器端卡死，那么检测不出来，心跳可以检测出来，因为需要回执
+TCP的KeepAlive只能保证两端的连接还存在，不能检测通讯双方的存活状态，如果服务器端卡死，那么检测不出来，心跳可以检测出来，因为需要回执，客户端而言，
+这时的最好选择就是断线后重新连接其他服务器，而不是一直认为当前服务器是可用状态。
 http://www.52im.net/thread-281-1-1.html
 http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2016/0307/4033.html (介绍了NAT超时等资料)
 http://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&mid=207243549&idx=1&sn=4ebe4beb8123f1b5ab58810ac8bc5994&scene=4#wechat_redirect (微信心跳机制)
@@ -93,6 +94,16 @@ Line：WIFI下是3分20秒，手机网络是7分钟
 
 
 
+如何避免后台进程被杀死：
+调用startForegound，让你的Service所在的线程成为前台进程
+Service的onStartCommond返回START_STICKY或 
+TART_REDELIVER_INTENT
+Service的onDestroy里面重新启动自己
+root之后提升为系统级App
+在Jni层使用c代码fork一个进程
+在清单文件中，intent-filter节点中添加android:priotity属性，让其等于1000，这是最高的优先级，不容易被杀死  
+在前台放一个像素的页面，例如QQ
+
 
 netty源码解析:
 https://segmentfault.com/a/1190000007282628
@@ -103,7 +114,8 @@ https://segmentfault.com/a/1190000007282628
 
 
 
-
+遇到的问题:
+1、升级安装以后，本地缓存可能会导致APP不能使用
 
 
 
